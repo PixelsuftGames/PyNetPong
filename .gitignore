@@ -1,0 +1,8 @@
+build
+out
+release
+dist
+.idea
+__pycache__
+upload.bat
+.buildozer

@@ -1,0 +1,12 @@
+{
+  "width": 640,
+  "height": 480,
+  "fullscreen": false,
+  "fps": 60,
+  "vsync": false,
+  "no_fps_limit": false,
+  "smooth_fix": false,
+  "anti_aliasing": true,
+  "show_fps": true,
+  "use_gzip": false
+}

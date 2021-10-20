@@ -132,8 +132,8 @@ def main(is_server: bool, host: str = None, port: int = None) -> None:
             score_surf = label_font.render(f'{s1}:{s2}', aa, (0, 0, 0))
         else:
             pygame.draw.rect(
-                screen, (255, 255, 255), (from_w(5), info[0]['y'],
-                                          from_w(player_size[0]), from_w(player_size[1])), border_radius=5
+                screen, (255, 255, 255), (from_w(5), from_h(info[0]['y']),
+                                          from_w(player_size[0]), from_h(player_size[1])), border_radius=5
             )
             pygame.draw.rect(
                 screen, (255, 255, 255), (w - 5 - from_w(player_size[0]),

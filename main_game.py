@@ -137,12 +137,12 @@ def main(is_server: bool, host: str = None, port: int = None) -> None:
             )
             pygame.draw.rect(
                 screen, (255, 255, 255), (w - 5 - from_w(player_size[0]),
-                                          from_h(player_pos[1]), from_w(player_size[0]),
+                                          player_pos[1], from_w(player_size[0]),
                                           from_h(player_size[1])), border_radius=5
             )
             pygame.draw.ellipse(
                 screen, (255, 255, 255),
-                (from_w(info[0]['bx']) - pre_ball[0], from_h(info[0]['by']) - from_h(ball_radius) - pre_ball[1],
+                (from_w(info[0]['bx']) - pre_ball[0], from_h(info[0]['by']) - pre_ball[1],
                  pre_ball[2], pre_ball[3]),
                 width=0
             )

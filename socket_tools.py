@@ -6,6 +6,11 @@ from threading import Thread
 from utils import *
 
 
+def logme(nn) -> None:
+    return
+    print(', '.join([str(nn) for _x in range(10)]))
+
+
 conf_: dict = get_var('conf')
 use_gzip: bool = conf_.get('use_gzip')
 info = [
@@ -49,15 +54,22 @@ def encode_msg_(message: dict) -> bytes:
 
 
 def wait_sock_accept() -> None:
+    logme(4)
     sock[3].listen()
+    logme(5)
     conn, addr = sock[3].accept()
+    logme(6)
     sock[0] = True
+    logme(7)
     sock[1] = conn
+    logme(8)
     sock[2] = addr
+    logme(9)
     server()
 
 
 def server() -> None:
+    logme(10)
     while sock[1]:
         size = int(sock[1].recv(10).decode(encoding_).strip())
         msg = decode_msg(sock[1].recv(size))
@@ -78,9 +90,13 @@ def client() -> None:
 
 
 def run_server(host: str, port: int) -> None:
+    logme(1)
     sock[3] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    logme(2)
     sock[3].bind((host, port))
+    logme(3)
     Thread(target=wait_sock_accept).start()
+    logme(3.5)
 
 
 def connect_server(host: str, port: int) -> None:

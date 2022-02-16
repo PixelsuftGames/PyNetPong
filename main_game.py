@@ -29,10 +29,13 @@ def main(is_server: bool, host: str = None, port: int = None) -> None:
     ball_radius = 20
     ball_d = ball_radius * 2
     player_pos = [5, 0]
+    real_y = 0
     player2_pos = [w - 5 - player_size[0], 0]
     num = int(not is_server)
     ball_pos = [half_w_, half_h_]
     s1, s2 = 0, 0
+    down_y = 0
+    is_down = False
     ball_speed = [random.choice((1, -1)), random.choice((1, -1))]
 
     def to_w(size: any) -> int:
@@ -81,17 +84,22 @@ def main(is_server: bool, host: str = None, port: int = None) -> None:
                 sys.exit(0)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = last_x, last_y = pygame.mouse.get_pos()
+                down_y = y
                 is_down = True
             elif event.type == pygame.MOUSEBUTTONUP:
                 x, y = last_x, last_y = pygame.mouse.get_pos()
                 is_down = False
             elif event.type == pygame.MOUSEMOTION:
-                x, y = last_x, last_y = pygame.mouse.get_pos()
-                if is_server:
-                    info[1]['y'] = y
-                else:
-                    info[1]['y'] = to_h(y)
-                player_pos[1] = y
+                x, y = pygame.mouse.get_pos()
+                if is_down:
+                    if is_server:
+                        info[1]['y'] += y - last_y
+                        player_pos[1] += y - last_y
+                    else:
+                        real_y += y - last_y
+                        info[1]['y'] = to_h(real_y)
+                        player_pos[1] = real_y
+                last_x, last_y = x, y
         if not clock.try_tick():
             continue
         screen.blit(pg_bg_img, (0, 0))
@@ -129,7 +137,7 @@ def main(is_server: bool, host: str = None, port: int = None) -> None:
                 info[1]['s2'] = s2
                 respawn_ball()
             pygame.draw.circle(screen, (255, 255, 255), ball_pos, ball_radius)
-            score_surf = label_font.render(f'{s1}:{s2}', aa, (0, 0, 0))
+            score_surf = label_font.render(f'{s2}:{s1}', aa, (0, 0, 0))
         else:
             pygame.draw.rect(
                 screen, (255, 255, 255), (from_w(5), from_h(info[0]['y']),
@@ -146,7 +154,7 @@ def main(is_server: bool, host: str = None, port: int = None) -> None:
                  pre_ball[2], pre_ball[3]),
                 width=0
             )
-            score_surf = label_font.render(f'{info[0]["s1"]}:{info[0]["s2"]}', aa, (0, 0, 0))
+            score_surf = label_font.render(f'{info[0]["s2"]}:{info[0]["s1"]}', aa, (0, 0, 0))
         screen.blit(score_surf, (w - score_surf.get_size()[0], 0))
 
         if show_fps:

@@ -3,6 +3,7 @@ import json
 import sys
 import random
 import pygame
+import subprocess
 from functools import lru_cache
 from PIL import Image
 try:
@@ -13,6 +14,7 @@ except ImportError:
     is_android = False
 
 
+is_windows = os.name == 'nt'
 cur_path = os.getcwd()
 vars_ = {}
 dir_exists = os.path.isdir
@@ -181,3 +183,23 @@ def random_ball_speed(min_: int = -5, max_: int = 5) -> list:
     while y_ == 0:
         y_ = random.randint(min_, max_)
     return [x_, y_]
+
+
+def is_ip(maybe_ip: str) -> bool:
+    if not maybe_ip.count('.') == 3:
+        return False
+    if maybe_ip.startswith('255.') or maybe_ip.startswith('0.') or maybe_ip.startswith('127.0.0')\
+        or maybe_ip.endswith('0.0') or maybe_ip.endswith('0.1') or maybe_ip.endswith('.255'):
+        return False
+    for i in maybe_ip.split('.'):
+        if not i.isdigit():
+            return False
+        if not 256 > int(i) >= 0:
+            return False
+    return True
+
+
+def get_hosts() -> tuple:
+    cmd = 'ipconfig' if is_windows else 'ifconfig'
+    output = subprocess.check_output([cmd], shell=True).decode(encoding_, errors='replace').strip()
+    return tuple(_x.strip() for _x in output.replace('\n', ' ').split(' ') if is_ip(_x.strip()))

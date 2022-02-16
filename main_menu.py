@@ -29,6 +29,9 @@ def main() -> None:
     pg_bg_img = to_image(bg_img, False)
     fps_font = pygame.font.Font(p('fonts', 'segoescb.ttf'), 25)
     label_font = pygame.font.Font(p('fonts', 'segoescb.ttf'), 25)
+    need_ip_surface = label_font.render(
+        f'IP: {", ".join(get_hosts())}', aa, (0, 0, 0)
+    )
 
     inputs = {
         'host': socket.gethostbyname(socket.gethostname()),
@@ -103,11 +106,11 @@ def main() -> None:
                     run_server(inputs['host'], int(inputs['port']))
                     continue
                 if x < half_w and button2_visible:
-                    if 350 > y > 300:
+                    if 325 > y > 275:
                         cur_input = 'host'
                         pygame.key.start_text_input()
                         continue
-                    if 400 > y > 350:
+                    if 375 > y > 325:
                         cur_input = 'port'
                         pygame.key.start_text_input()
                         continue
@@ -167,8 +170,10 @@ def main() -> None:
         ), (0, 300))
 
         screen.blit(label_font.render(
-            f'Host: {inputs["port"]}' + ('|' if cur_input == 'port' else ''), aa, (0, 0, 0)
-        ), (0, 350))
+            f'Port: {inputs["port"]}' + ('|' if cur_input == 'port' else ''), aa, (0, 0, 0)
+        ), (0, 325))
+
+        screen.blit(need_ip_surface, (0, 350))
 
         pygame.draw.rect(screen, watermark_bg_color, watermark_bg_rect, border_radius=5)
         screen.blit(watermark_text, watermark_text_rect)
